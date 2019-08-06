@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Rol extends Model
 {
@@ -12,6 +12,6 @@ class Rol extends Model
     ];
 
     public function user(){
-        return BelongsTo('User');
+        return HasMany('User');
     }
 }

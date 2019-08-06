@@ -6,6 +6,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -39,6 +41,11 @@ class User extends Authenticatable
     ];
 
     public function rol(){
-        return HasOne('Rol');
+        return BelongsTo('Rol');
+    }
+
+    public function donaciones()
+    {
+        return $this->belongsToMany('App\Donacion', 'donacion_benefactor', null, 'benefactor_id');
     }
 }
