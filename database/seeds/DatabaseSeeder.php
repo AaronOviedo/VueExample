@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Rol;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +12,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        Rol::create([
+            'rol' => 'Beneficiarios',
+            'description' => 'This is the first rol'
+        ]);
+
+        Rol::create([
+            'rol' => 'Donadores',
+            'description' => 'This is the second rol'
+        ]);
     }
 }
