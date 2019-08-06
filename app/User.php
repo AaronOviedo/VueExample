@@ -41,7 +41,7 @@ class User extends Authenticatable
     ];
 
     public function rol(){
-        return BelongsTo('Rol');
+        return $this->belongsTo('App\Rol', 'rol_id');
     }
 
     public function donaciones()
