@@ -1727,23 +1727,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['benefactors', 'donators'],
-  // data(){
-  //     return {
-  //         benefactors: [{
-  //             'id':   1,
-  //             'name': 'Aaron'
-  //         }, {
-  //             'id':   2,
-  //             'name': 'test'
-  //         }]
-  //     }
-  // },
+  data: function data() {
+    return {
+      benefactor_id: '',
+      donator_id: '',
+      sum: '',
+      benefactors: [],
+      donators: []
+    };
+  },
   mounted: function mounted() {
+    var _this = this;
+
     console.log('Component mounted.');
+    axios.get('/donators').then(function (result) {
+      if (result.data.code == 200) {
+        console.log(result.data.message);
+        _this.donators = result.data.data;
+      } else {
+        console.log(result.data.message);
+      }
+    })["catch"](function (e) {
+      console.log('Error in donators');
+    });
+    axios.get('/benefactors').then(function (result) {
+      if (result.data.code == 200) {
+        console.log(result.data.message);
+        _this.benefactors = result.data.data;
+      } else {
+        console.log(result.data.message);
+      }
+    })["catch"](function (e) {
+      console.log('Error in benefactors');
+    });
   },
   methods: {
-    newDonation: function newDonation() {}
+    newDonation: function newDonation() {
+      axios.post('/donate', {
+        benefactor: this.benefactor_id,
+        donator: this.donator_id,
+        sum: this.sum
+      }).then(function (result) {
+        console.log(result);
+      })["catch"](function (e) {
+        console.log('Error');
+      });
+    }
   }
 });
 
@@ -1772,6 +1801,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1783,13 +1820,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     newDonator: function newDonator() {
-      axios.post('/donate', {
+      axios.post('/donator', {
         name: this.name,
         email: this.email,
         username: this.username,
         password: this.password
       }).then(function (response) {
-        console.log(response.data);
+        if (response.data.code == 201) window.location = 'home';else alert('Error, contact the administrator');
       })["catch"](function (e) {
         console.log('Error');
       });
@@ -37116,8 +37153,31 @@ var render = function() {
           _c(
             "select",
             {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.benefactor_id,
+                  expression: "benefactor_id"
+                }
+              ],
               staticClass: "form-control",
-              attrs: { name: "benefactor", id: "benefactor" }
+              attrs: { name: "benefactor", id: "benefactor" },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.benefactor_id = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
             },
             _vm._l(_vm.benefactors, function(benefactor) {
               return _c(
@@ -37138,43 +37198,75 @@ var render = function() {
           _c(
             "select",
             {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.donator_id,
+                  expression: "donator_id"
+                }
+              ],
               staticClass: "form-control",
-              attrs: { name: "donator", id: "donator" }
+              attrs: { name: "donator", id: "donator" },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.donator_id = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
             },
-            _vm._l(_vm.benefactors, function(benefactor) {
-              return _c(
-                "option",
-                { key: benefactor.id, attrs: { value: "" } },
-                [_vm._v(_vm._s(benefactor.name))]
-              )
+            _vm._l(_vm.donators, function(donator) {
+              return _c("option", { key: donator.id, attrs: { value: "" } }, [
+                _vm._v(_vm._s(donator.name))
+              ])
             }),
             0
           )
         ]),
         _vm._v(" "),
-        _vm._m(0),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { staticClass: "p-4 pr-5", attrs: { for: "sum" } }, [
+            _vm._v("Monto")
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.sum,
+                expression: "sum"
+              }
+            ],
+            staticClass: "form-control p-3",
+            attrs: { type: "number", name: "sum", id: "sum" },
+            domProps: { value: _vm.sum },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.sum = $event.target.value
+              }
+            }
+          })
+        ]),
         _vm._v(" "),
-        _vm._m(1)
+        _vm._m(0)
       ]
     )
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("label", { staticClass: "p-4 pr-5", attrs: { for: "sum" } }, [
-        _vm._v("Monto")
-      ]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control p-3",
-        attrs: { type: "number", name: "sum", id: "sum" }
-      })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -37210,146 +37302,165 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _c(
-      "form",
-      {
-        attrs: { action: "" },
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.newDonator()
-          }
-        }
-      },
-      [
-        _c("div", { staticClass: "form-group p-5" }, [
-          _c("div", { staticClass: "form-control m-4 p-1" }, [
-            _c("label", { staticClass: "mr-5", attrs: { for: "name" } }, [
-              _vm._v("Name: ")
-            ]),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.name,
-                  expression: "name"
-                }
-              ],
-              staticClass: "rounded",
-              attrs: { type: "text", name: "name", id: "name", required: "" },
-              domProps: { value: _vm.name },
+    _c("div", { staticClass: "col-md-8" }, [
+      _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card-header" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c(
+            "form",
+            {
+              attrs: { action: "" },
               on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.name = $event.target.value
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.newDonator()
                 }
               }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-control m-4 p-1" }, [
-            _c("label", { staticClass: "mr-5", attrs: { for: "email" } }, [
-              _vm._v("Email: ")
-            ]),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.email,
-                  expression: "email"
-                }
-              ],
-              staticClass: "rounded",
-              attrs: {
-                type: "email",
-                name: "email",
-                id: "email",
-                required: ""
-              },
-              domProps: { value: _vm.email },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.email = $event.target.value
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-control m-4 p-1" }, [
-            _c("label", { staticClass: "mr-5", attrs: { for: "username" } }, [
-              _vm._v("Username: ")
-            ]),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.username,
-                  expression: "username"
-                }
-              ],
-              staticClass: "rounded",
-              attrs: {
-                type: "text",
-                name: "username",
-                id: "username",
-                required: ""
-              },
-              domProps: { value: _vm.username },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.username = $event.target.value
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-control m-4 p-1" }, [
-            _c("label", { staticClass: "mr-5", attrs: { for: "password" } }, [
-              _vm._v("Password: ")
-            ]),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.password,
-                  expression: "password"
-                }
-              ],
-              staticClass: "rounded",
-              attrs: {
-                type: "password",
-                name: "password",
-                id: "password",
-                required: ""
-              },
-              domProps: { value: _vm.password },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.password = $event.target.value
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _vm._m(0)
+            },
+            [
+              _c("div", { staticClass: "form-group p-2" }, [
+                _c("div", { staticClass: "row m-4 p-1" }, [
+                  _c("label", { staticClass: "mr-5", attrs: { for: "name" } }, [
+                    _vm._v("Name: ")
+                  ]),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.name,
+                        expression: "name"
+                      }
+                    ],
+                    staticClass: "rounded",
+                    attrs: {
+                      type: "text",
+                      name: "name",
+                      id: "name",
+                      required: ""
+                    },
+                    domProps: { value: _vm.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.name = $event.target.value
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row m-4 p-1" }, [
+                  _c(
+                    "label",
+                    { staticClass: "mr-5", attrs: { for: "email" } },
+                    [_vm._v("Email: ")]
+                  ),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.email,
+                        expression: "email"
+                      }
+                    ],
+                    staticClass: "rounded",
+                    attrs: {
+                      type: "email",
+                      name: "email",
+                      id: "email",
+                      required: ""
+                    },
+                    domProps: { value: _vm.email },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.email = $event.target.value
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row m-4 p-1" }, [
+                  _c(
+                    "label",
+                    { staticClass: "mr-5", attrs: { for: "username" } },
+                    [_vm._v("Username: ")]
+                  ),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.username,
+                        expression: "username"
+                      }
+                    ],
+                    staticClass: "rounded",
+                    attrs: {
+                      type: "text",
+                      name: "username",
+                      id: "username",
+                      required: ""
+                    },
+                    domProps: { value: _vm.username },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.username = $event.target.value
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row m-4 p-1" }, [
+                  _c(
+                    "label",
+                    { staticClass: "mr-5", attrs: { for: "password" } },
+                    [_vm._v("Password: ")]
+                  ),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.password,
+                        expression: "password"
+                      }
+                    ],
+                    staticClass: "rounded",
+                    attrs: {
+                      type: "password",
+                      name: "password",
+                      id: "password",
+                      required: ""
+                    },
+                    domProps: { value: _vm.password },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.password = $event.target.value
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _vm._m(0)
+              ])
+            ]
+          )
         ])
-      ]
-    )
+      ])
+    ])
   ])
 }
 var staticRenderFns = [
@@ -37357,7 +37468,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "m-4 p-3" }, [
+    return _c("div", { staticClass: "mt-2     ml-3 p-3" }, [
       _c(
         "button",
         { staticClass: "btn btn-primary", attrs: { type: "submit" } },

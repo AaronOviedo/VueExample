@@ -21,3 +21,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/donator', 'DonacionController@register');
 Route::post('/donate', 'DonacionController@donate');
 Route::get('/donator', 'DonacionController@index');
+Route::get('/donators', 'DonacionController@getDonators');
+Route::get('/benefactors', 'DonacionController@getBenefactors');

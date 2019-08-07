@@ -73,7 +73,8 @@
                         <a href="{{ route('login') }}">Login</a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
+                            <a class="nav-link" href="{{ route('register') }}">Register as benefactor</a>
+                            <a class="nav-link" href="/donator">Register as donator</a>
                         @endif
                     @endauth
                 </div>
