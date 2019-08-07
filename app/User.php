@@ -46,6 +46,6 @@ class User extends Authenticatable
 
     public function donaciones()
     {
-        return $this->belongsToMany('App\Donacion', 'donacion_benefactor', null, 'benefactor_id');
+        return $this->hasMany('App\Donacion', 'benefactor_id', 'id');
     }
 }

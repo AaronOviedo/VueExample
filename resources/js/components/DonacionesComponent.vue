@@ -3,21 +3,21 @@
         <form action="" v-on:submit.prevent="newDonation()">
             <div class="form-group">
                 <label for="benefactor" class="p-4 pr-5">Benefactor</label>
-                <select name="benefactor" id="benefactor" class='form-control' v-model="benefactor_id">
-                    <option v-for="benefactor in benefactors" :key="benefactor.id" value="">{{benefactor.name}}</option>
+                <select name="benefactor" id="benefactor" class='row' v-model="benefactor_id">
+                    <option v-for="benefactor in benefactors" :key="benefactor.id" v-bind:value="benefactor.id">{{benefactor.name}}</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="donator" class="p-4 pr-5">Donador</label>
-                <select name="donator" id="donator" class='form-control' v-model="donator_id">
-                    <option v-for="donator in donators" :key="donator.id" value="">{{donator.name}}</option>
+                <select name="donator" id="donator" class='row' v-model="donator_id">
+                    <option v-for="donator in donators" :key="donator.id" v-bind:value="donator.id">{{donator.name}}</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="sum" class="p-4 pr-5">Monto</label>
-                <input type="number" name="sum" id="sum" class='form-control p-3' v-model="sum">
+                <input type="number" name="sum" id="sum" class='row p-3' v-model="sum">
             </div>
 
             <div class="form-group">
@@ -73,7 +73,10 @@
                     sum: this.sum
                 })
                 .then(result => {
-                    console.log(result)
+                    if(result.data.code == 201)
+                        console.log(result.data.message)
+                    else
+                        console.log('Error de server')
                 })
                 .catch(e => {
                     console.log('Error')

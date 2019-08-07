@@ -64,6 +64,10 @@
                                         {{ __('Logout') }}
                                     </a>
 
+                                    @if (Auth::user()->rol->id == 1)
+                                        <a href="/donations" class="dropdown-item">Mis donaciones</a>
+                                    @endif
+
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
