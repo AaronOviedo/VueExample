@@ -77,6 +77,7 @@ class DonacionController extends Controller
         $user_id = Auth::id();
         $donaciones = Donacion::where('benefactor_id', $user_id)->get();
 
+        $total = 0;
         $newDonations = array();
 
         foreach ($donaciones as $donacion) {
@@ -87,6 +88,7 @@ class DonacionController extends Controller
                 'monto' => $donacion->sum,
                 'created_at' => $donacion->created_at
             );
+            $total += $donacion->sum;
 
             array_push($newDonations, $tempArray);
         }
@@ -94,6 +96,7 @@ class DonacionController extends Controller
         return [
             'message' => 'Donations retrieved succesfully',
             'data' => $newDonations,
+            'total' => $total,
             'code' => 200
         ];
     }

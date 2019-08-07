@@ -3,16 +3,16 @@
         <form action="" v-on:submit.prevent="newDonation()">
             <div class="form-group">
                 <label for="benefactor" class="p-4 pr-5">Benefactor</label>
-                <select name="benefactor" id="benefactor" class='row' v-model="benefactor_id">
-                    <option v-for="benefactor in benefactors" :key="benefactor.id" v-bind:value="benefactor.id">{{benefactor.name}}</option>
-                </select>
+                <el-select name="benefactor" id="benefactor" clearable class='row' v-model="benefactor_id" placeholder="Elegir un benefactor">
+                    <el-option v-for="benefactor in benefactors" :key="benefactor.id" v-bind:value="benefactor.id" :label="benefactor.name"/>
+                </el-select>
             </div>
 
             <div class="form-group">
                 <label for="donator" class="p-4 pr-5">Donador</label>
-                <select name="donator" id="donator" class='row' v-model="donator_id">
-                    <option v-for="donator in donators" :key="donator.id" v-bind:value="donator.id">{{donator.name}}</option>
-                </select>
+                <el-select name="donator" id="donator" class='row' v-model="donator_id" placeholder="Elegir un donador">
+                    <el-option v-for="donator in donators" :key="donator.id" v-bind:value="donator.id" :label="donator.name"/>
+                </el-select>
             </div>
 
             <div class="form-group">
@@ -21,7 +21,7 @@
             </div>
 
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Enviar</button>
+                <el-button type="primary" native-primary="submit">Donar</el-button>
             </div>
         </form>
     </div>
